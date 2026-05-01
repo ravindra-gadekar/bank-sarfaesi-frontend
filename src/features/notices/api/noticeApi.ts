@@ -8,7 +8,6 @@ export interface NoticeData {
   version: number;
   status: 'draft' | 'submitted' | 'rejected' | 'approved' | 'final' | 'superseded';
   fields: Record<string, unknown>;
-  chatSessionLog: Array<{ role: string; message: string; fieldKey?: string; timestamp: string }>;
   recipients: Array<{ name: string; address: string; type: string }>;
   generatedDocs: Array<{ format: string; fileKey: string; sha256: string; recipientName: string; generatedAt: string }>;
   makerUserId: string;
@@ -21,30 +20,6 @@ export interface NoticeData {
   supersedes?: string;
   createdAt: string;
   updatedAt: string;
-}
-
-export interface ChatFlowConfig {
-  _id: string;
-  noticeType: string;
-  questionFlow: QuestionNode[];
-  keywordAnswerMap: Record<string, string>;
-}
-
-export interface QuestionNode {
-  id: string;
-  questionText: string;
-  fieldKey: string;
-  inputType: 'text' | 'currency' | 'date' | 'number' | 'dropdown' | 'textarea';
-  options?: string[];
-  validation: Array<{ type: string; value?: string | number; message: string }>;
-  chatScript: string;
-  nextQuestion: string | null;
-  conditionalNext?: Array<{ value: string; nextId: string }>;
-  isLoopStart?: boolean;
-  loopBackTo?: string;
-  loopPrompt?: string;
-  group?: string;
-  required?: boolean;
 }
 
 export const noticeApi = {
@@ -92,19 +67,9 @@ export const noticeApi = {
     return data.data;
   },
 
-  async getChatFlow(noticeType: string) {
-    const { data } = await apiClient.get<{ success: boolean; data: ChatFlowConfig }>(`/chat-flow/${noticeType}`);
-    return data.data;
-  },
-
   async getGenerationStatus(noticeId: string) {
     const { data } = await apiClient.get<{ noticeId: string; status: string; error?: string; completedAt?: string }>(`/notices/${noticeId}/generation-status`);
     return data;
-  },
-
-  async saveChatLog(noticeId: string, chatLog: Array<{ role: string; message: string; fieldKey?: string }>) {
-    const { data } = await apiClient.put<{ success: boolean; data: NoticeData }>(`/notices/${noticeId}/fields`, { fields: {}, chatSessionLog: chatLog });
-    return data.data;
   },
 
   getDownloadUrl(noticeId: string, docIndex: number) {
