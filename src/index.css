@@ -1,0 +1,37 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  /* Claude.ai-inspired warm palette — Light */
+  --color-sand-50: #FAF8F5;
+  --color-sand-100: #F5F0E8;
+  --color-sand-200: #EEECE2;
+  --color-sand-300: #E0DDD4;
+  --color-sand-400: #C4C0B6;
+  --color-sand-500: #A8A49A;
+
+  --color-sidebar: #1A1A1A;
+  --color-sidebar-hover: #2A2A2A;
+  --color-sidebar-active: #353535;
+  --color-sidebar-text: #A3A3A3;
+  --color-sidebar-text-active: #FFFFFF;
+
+  --color-accent: #C96442;
+  --color-accent-hover: #B8563A;
+  --color-accent-light: #F5E6DF;
+
+  --color-ink: #1A1A1A;
+  --color-ink-secondary: #5E5C57;
+  --color-ink-tertiary: #8E8C87;
+
+  /* Dark mode surfaces */
+  --color-dark-bg: #1A1A1A;
+  --color-dark-surface: #242424;
+  --color-dark-surface-hover: #2E2E2E;
+  --color-dark-border: #363636;
+  --color-dark-text: #ECECEC;
+  --color-dark-text-secondary: #A3A3A3;
+  --color-dark-text-tertiary: #737373;
+}
+
