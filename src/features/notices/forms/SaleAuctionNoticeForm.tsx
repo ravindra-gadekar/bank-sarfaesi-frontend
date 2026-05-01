@@ -16,7 +16,7 @@ const STEPS = [
 const EMD_MODES = ['DD', 'RTGS', 'NEFT', 'Online Banking', 'UPI'];
 
 export default function SaleAuctionNoticeForm({ onSubmit }: { onSubmit: () => void }) {
-  const { noticeFields, setFieldFromForm, caseData } = useNoticeFieldsStore();
+  const { noticeFields, setField, caseData } = useNoticeFieldsStore();
   const [step, setStep] = useState(0);
   const saveStatus = useAutoSave();
 
@@ -29,10 +29,10 @@ export default function SaleAuctionNoticeForm({ onSubmit }: { onSubmit: () => vo
   const getNum = (key: string) => Number(noticeFields[key] ?? 0);
   const getArr = (key: string) => (noticeFields[key] as string[] ?? []);
   const handleChange = (key: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    setFieldFromForm(key, e.target.value);
+    setField(key, e.target.value);
   };
   const handleNumChange = (key: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFieldFromForm(key, parseFloat(e.target.value) || 0);
+    setField(key, parseFloat(e.target.value) || 0);
   };
 
   const formatCurrency = (amt: number) =>
@@ -44,7 +44,7 @@ export default function SaleAuctionNoticeForm({ onSubmit }: { onSubmit: () => vo
     if (nd) {
       const d = new Date(nd);
       d.setDate(d.getDate() + 30);
-      setFieldFromForm('minimumAuctionDate', d.toISOString().split('T')[0]);
+      setField('minimumAuctionDate', d.toISOString().split('T')[0]);
     }
   }, [noticeFields.noticeDate]);
 
@@ -60,7 +60,7 @@ export default function SaleAuctionNoticeForm({ onSubmit }: { onSubmit: () => vo
     const updated = current.includes(mode)
       ? current.filter((m) => m !== mode)
       : [...current, mode];
-    setFieldFromForm('emdPaymentModes', updated);
+    setField('emdPaymentModes', updated);
   };
 
   const borrowers = (caseData?.borrowers as Array<{ name: string; address: string; type: string }>) || [];
@@ -395,7 +395,7 @@ export default function SaleAuctionNoticeForm({ onSubmit }: { onSubmit: () => vo
 
               <MultiDatePicker
                 dates={getArr('propertyInspectionDates')}
-                onChange={(dates) => setFieldFromForm('propertyInspectionDates', dates)}
+                onChange={(dates) => setField('propertyInspectionDates', dates)}
                 minDates={2}
                 label="Property Inspection Dates"
               />

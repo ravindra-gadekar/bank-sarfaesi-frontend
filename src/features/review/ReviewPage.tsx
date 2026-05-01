@@ -142,22 +142,6 @@ export default function ReviewPage() {
         </div>
       )}
 
-      {/* Chat Session Log (if available) */}
-      {notice.chatSessionLog.length > 0 && (
-        <div className="bg-sand-50 dark:bg-dark-surface rounded-2xl border border-sand-300 dark:border-dark-border p-6">
-          <h3 className="text-lg font-medium text-ink dark:text-dark-text mb-3">Chat Session Log</h3>
-          <div className="space-y-2 max-h-64 overflow-y-auto">
-            {notice.chatSessionLog.map((entry, i) => (
-              <div key={i} className={`text-sm p-2 rounded-lg ${
-                entry.role === 'bot' ? 'bg-sand-100 dark:bg-dark-surface-hover' : 'bg-accent-light dark:bg-accent/20 ml-8'
-              }`}>
-                <span className="font-medium text-xs text-ink-tertiary">{entry.role}:</span>{' '}
-                <span className="text-ink dark:text-dark-text">{entry.message}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
     </div>
   );
 }

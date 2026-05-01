@@ -20,9 +20,6 @@ const VersionCompare = lazy(() => import('./features/registry/VersionCompare'));
 const VersionHistory = lazy(() => import('./features/registry/VersionHistory'));
 const Settings = lazy(() => import('./features/branch/SettingsPage'));
 const Users = lazy(() => import('./features/users/UserListPage'));
-const ChatFlowConfigPage = lazy(() => import('./features/chat-flows/ChatFlowConfigPage'));
-const ChatFlowEditor = lazy(() => import('./features/chat-flows/ChatFlowEditor'));
-const ChatFlowPreview = lazy(() => import('./features/chat-flows/ChatFlowPreview'));
 const BranchSetupWizard = lazy(() => import('./features/onboarding/BranchSetupWizard'));
 const InviteSignupPage = lazy(() => import('./features/onboarding/InviteSignupPage'));
 const SsoCallback = lazy(() => import('./features/auth/SsoCallbackPage'));
@@ -67,9 +64,6 @@ export function AppRouter() {
             <Route path="/registry/versions" element={<VersionHistory />} />
             <Route path="/audit-logs" element={<AuditLog />} />
             <Route path="/users" element={<Users />} />
-            <Route path="/chat-flows" element={<ChatFlowConfigPage />} />
-            <Route path="/chat-flows/:configId/edit" element={<ChatFlowEditor />} />
-            <Route path="/chat-flows/:configId/preview" element={<ChatFlowPreview />} />
             <Route path="/settings" element={<Settings />} />
           </Route>
         </Route>

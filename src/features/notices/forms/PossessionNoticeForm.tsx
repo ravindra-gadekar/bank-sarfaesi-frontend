@@ -6,7 +6,7 @@ import DateChainBadge from '../components/DateChainBadge';
 const STEPS = ['13(2) Reference', 'Possession Details', 'Witnesses', 'Newspaper Publication', 'DRT & Review'];
 
 export default function PossessionNoticeForm({ onSubmit }: { onSubmit: () => void }) {
-  const { noticeFields, setFieldFromForm, caseData } = useNoticeFieldsStore();
+  const { noticeFields, setField, caseData } = useNoticeFieldsStore();
   const [step, setStep] = useState(0);
   const saveStatus = useAutoSave();
 
@@ -18,10 +18,10 @@ export default function PossessionNoticeForm({ onSubmit }: { onSubmit: () => voi
   const getVal = (key: string) => (noticeFields[key] ?? '') as string;
   const getNum = (key: string) => Number(noticeFields[key] ?? 0);
   const handleChange = (key: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    setFieldFromForm(key, e.target.value);
+    setField(key, e.target.value);
   };
   const handleNumChange = (key: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFieldFromForm(key, parseFloat(e.target.value) || 0);
+    setField(key, parseFloat(e.target.value) || 0);
   };
 
   const formatCurrency = (amt: number) =>
@@ -33,7 +33,7 @@ export default function PossessionNoticeForm({ onSubmit }: { onSubmit: () => voi
     if (possDate) {
       const d = new Date(possDate);
       d.setDate(d.getDate() + 45);
-      setFieldFromForm('section17Deadline', d.toISOString().split('T')[0]);
+      setField('section17Deadline', d.toISOString().split('T')[0]);
     }
   }, [noticeFields.dateOfPossession]);
 

@@ -5,7 +5,7 @@ import { useAutoSave } from '../hooks/useAutoSave';
 const STEPS = ['Notice Details', 'Amounts', 'Borrower Info', 'Assets & Security', 'Review & Submit'];
 
 export default function DemandNoticeForm({ onSubmit }: { onSubmit: () => void }) {
-  const { noticeFields, setFieldFromForm, caseData } = useNoticeFieldsStore();
+  const { noticeFields, setField, caseData } = useNoticeFieldsStore();
   const [step, setStep] = useState(0);
   const saveStatus = useAutoSave();
 
@@ -15,10 +15,10 @@ export default function DemandNoticeForm({ onSubmit }: { onSubmit: () => void })
   const getVal = (key: string) => (noticeFields[key] ?? '') as string;
   const getNum = (key: string) => Number(noticeFields[key] ?? 0);
   const handleChange = (key: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFieldFromForm(key, e.target.value);
+    setField(key, e.target.value);
   };
   const handleNumChange = (key: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFieldFromForm(key, parseFloat(e.target.value) || 0);
+    setField(key, parseFloat(e.target.value) || 0);
   };
 
   const formatCurrency = (amt: number) =>
@@ -28,7 +28,7 @@ export default function DemandNoticeForm({ onSubmit }: { onSubmit: () => void })
 
   // Sync computed total into the store so it's persisted/validated on submit
   useEffect(() => {
-    setFieldFromForm('totalAmountDemanded', totalComputed);
+    setField('totalAmountDemanded', totalComputed);
   }, [totalComputed]);
 
   // Compute repayment deadline
@@ -37,7 +37,7 @@ export default function DemandNoticeForm({ onSubmit }: { onSubmit: () => void })
     if (nd) {
       const d = new Date(nd);
       d.setDate(d.getDate() + 60);
-      setFieldFromForm('repaymentDeadline', d.toISOString().split('T')[0]);
+      setField('repaymentDeadline', d.toISOString().split('T')[0]);
     }
   }, [noticeFields.noticeDate]);
 
