@@ -7,6 +7,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 // Lazy-loaded feature pages
 const Login = lazy(() => import('./features/auth/LoginPage'));
 const BranchSelection = lazy(() => import('./features/auth/BranchSelectionPage'));
+const OfficeSelection = lazy(() => import('./features/auth/OfficeSelectionPage'));
 const Dashboard = lazy(() => import('./features/dashboard/DashboardPage'));
 const CaseList = lazy(() => import('./features/cases/CaseListPage'));
 const CaseForm = lazy(() => import('./features/cases/CaseFormPage'));
@@ -43,7 +44,8 @@ export function AppRouter() {
         <Route path="/invite/:token" element={<InviteSignupPage />} />
         <Route path="/sso/callback" element={<SsoCallback />} />
 
-        {/* Authenticated but no branch required */}
+        {/* Authenticated but no office required */}
+        <Route path="/offices" element={<OfficeSelection />} />
         <Route path="/branches" element={<BranchSelection />} />
         <Route path="/onboarding" element={<BranchSetupWizard />} />
 
@@ -69,7 +71,7 @@ export function AppRouter() {
         </Route>
 
         {/* Default redirect */}
-        <Route path="*" element={<Navigate to="/branches" replace />} />
+        <Route path="*" element={<Navigate to="/offices" replace />} />
       </Routes>
     </Suspense>
   );

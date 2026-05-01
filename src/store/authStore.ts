@@ -1,10 +1,24 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 
+export type UserKind = 'app' | 'bank';
+export type OfficeType = 'HO' | 'Zonal' | 'Regional' | 'Branch';
+
 interface BranchInfo {
   branchId: string;
   branchName: string;
   bankName: string;
+  role: string;
+  officeType?: OfficeType;
+  bankRootId?: string;
+}
+
+export interface OfficeSummary {
+  officeId: string;
+  bankName: string;
+  branchName?: string;
+  officeType: OfficeType;
+  bankRootId: string;
   role: string;
 }
 
@@ -13,30 +27,42 @@ interface User {
   name: string;
   email: string;
   role: string;
-  branchId: string;
-  branchName: string;
+  branchId?: string;
+  branchName?: string;
+  userKind?: UserKind;
+  appRole?: 'superadmin' | 'admin' | 'support';
+  bankRole?: 'admin' | 'manager' | 'maker' | 'checker' | 'auditor';
+  officeId?: string;
 }
 
 interface AuthState {
-  /** True after OTP verify — email is confirmed */
   isAuthenticated: boolean;
-  /** The verified email */
   email: string | null;
-  /** Branches the user belongs to (populated after OTP verify) */
   branches: BranchInfo[];
-  /** True after user selects a branch */
   hasBranch: boolean;
-  /** Full user object — populated after branch selection */
+  offices: OfficeSummary[];
+  hasOffice: boolean;
+  selectedOfficeId: string | null;
   user: User | null;
 
-  /** Called after OTP verify — sets email + branches */
   loginIdentity: (email: string, branches: BranchInfo[]) => void;
-  /** Called after branch selection — sets full user context */
   selectBranch: (user: User) => void;
-  /** Update the branches list (e.g. after creating a new branch) */
   setBranches: (branches: BranchInfo[]) => void;
+  setOffices: (offices: OfficeSummary[]) => void;
+  selectOffice: (officeId: string, user: User) => void;
   logout: () => void;
   setUser: (user: User) => void;
+}
+
+function branchesToOffices(branches: BranchInfo[]): OfficeSummary[] {
+  return branches.map((b) => ({
+    officeId: b.branchId,
+    bankName: b.bankName,
+    branchName: b.branchName,
+    officeType: b.officeType ?? 'Branch',
+    bankRootId: b.bankRootId ?? b.branchId,
+    role: b.role,
+  }));
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -46,19 +72,55 @@ export const useAuthStore = create<AuthState>()(
       email: null,
       branches: [],
       hasBranch: false,
+      offices: [],
+      hasOffice: false,
+      selectedOfficeId: null,
       user: null,
 
       loginIdentity: (email, branches) =>
-        set({ isAuthenticated: true, email, branches, hasBranch: false, user: null }),
+        set({
+          isAuthenticated: true,
+          email,
+          branches,
+          hasBranch: false,
+          offices: branchesToOffices(branches),
+          hasOffice: false,
+          selectedOfficeId: null,
+          user: null,
+        }),
 
       selectBranch: (user) =>
-        set({ hasBranch: true, user }),
+        set({
+          hasBranch: true,
+          hasOffice: true,
+          selectedOfficeId: user.officeId ?? user.branchId ?? null,
+          user,
+        }),
 
       setBranches: (branches) =>
-        set({ branches }),
+        set({ branches, offices: branchesToOffices(branches) }),
+
+      setOffices: (offices) => set({ offices }),
+
+      selectOffice: (officeId, user) =>
+        set({
+          hasOffice: true,
+          hasBranch: true,
+          selectedOfficeId: officeId,
+          user,
+        }),
 
       logout: () =>
-        set({ isAuthenticated: false, email: null, branches: [], hasBranch: false, user: null }),
+        set({
+          isAuthenticated: false,
+          email: null,
+          branches: [],
+          hasBranch: false,
+          offices: [],
+          hasOffice: false,
+          selectedOfficeId: null,
+          user: null,
+        }),
 
       setUser: (user) => set({ user }),
     }),

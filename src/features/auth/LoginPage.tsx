@@ -137,8 +137,14 @@ export default function LoginPage() {
     setLoading(true);
     try {
       const { data } = await authApi.verifyOtp(email.trim().toLowerCase(), code);
-      loginIdentity(data.data.email, data.data.branches ?? []);
-      navigate('/branches', { replace: true });
+      const branches = data.data.branches ?? [];
+      if (branches.length === 0) {
+        setError('No account found for this email. Please ask your administrator to send you an invite.');
+        setOtp(Array(OTP_LENGTH).fill(''));
+        return;
+      }
+      loginIdentity(data.data.email, branches);
+      navigate('/offices', { replace: true });
     } catch (err) {
       setError(getErrorMessage(err));
       setOtp(Array(OTP_LENGTH).fill(''));
