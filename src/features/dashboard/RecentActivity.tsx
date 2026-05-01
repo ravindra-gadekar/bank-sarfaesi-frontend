@@ -17,7 +17,6 @@ const ENTITY_LABELS: Record<string, string> = {
   notice: 'notice',
   user: 'user',
   branch: 'branch',
-  chatFlowConfig: 'chat flow config',
 };
 
 function formatAction(item: RecentActivityItem): string {

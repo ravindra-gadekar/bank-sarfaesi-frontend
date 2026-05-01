@@ -9,7 +9,6 @@ const navItems = [
   { path: '/registry', label: 'Registry' },
   { path: '/audit-logs', label: 'Audit Log' },
   { path: '/users', label: 'Users' },
-  { path: '/chat-flows', label: 'Chat Flows' },
   { path: '/settings', label: 'Settings' },
 ];
 
