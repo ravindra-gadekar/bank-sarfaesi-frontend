@@ -12,12 +12,6 @@ interface NoticeFieldsState {
   getField: (key: string) => unknown;
   setCaseData: (data: Record<string, unknown>) => void;
   resetFields: () => void;
-  /** Listeners for field changes — used by chat sync */
-  fieldChangeListeners: Array<(key: string, value: unknown, source: 'form' | 'chat') => void>;
-  addFieldChangeListener: (listener: (key: string, value: unknown, source: 'form' | 'chat') => void) => void;
-  removeFieldChangeListener: (listener: (key: string, value: unknown, source: 'form' | 'chat') => void) => void;
-  setFieldFromForm: (key: string, value: unknown) => void;
-  setFieldFromChat: (key: string, value: unknown) => void;
 }
 
 export const useNoticeFieldsStore = create<NoticeFieldsState>((set, get) => ({
@@ -26,7 +20,6 @@ export const useNoticeFieldsStore = create<NoticeFieldsState>((set, get) => ({
   noticeType: null,
   noticeFields: {},
   caseData: null,
-  fieldChangeListeners: [],
 
   setNoticeContext: (noticeId, caseId, noticeType) =>
     set({ noticeId, caseId, noticeType }),
@@ -45,21 +38,6 @@ export const useNoticeFieldsStore = create<NoticeFieldsState>((set, get) => ({
 
   setCaseData: (data) => set({ caseData: data }),
 
-  resetFields: () => set({ noticeFields: {}, noticeId: null, caseId: null, noticeType: null, caseData: null }),
-
-  addFieldChangeListener: (listener) =>
-    set((state) => ({ fieldChangeListeners: [...state.fieldChangeListeners, listener] })),
-
-  removeFieldChangeListener: (listener) =>
-    set((state) => ({ fieldChangeListeners: state.fieldChangeListeners.filter((l) => l !== listener) })),
-
-  setFieldFromForm: (key, value) => {
-    set((state) => ({ noticeFields: { ...state.noticeFields, [key]: value } }));
-    get().fieldChangeListeners.forEach((l) => l(key, value, 'form'));
-  },
-
-  setFieldFromChat: (key, value) => {
-    set((state) => ({ noticeFields: { ...state.noticeFields, [key]: value } }));
-    get().fieldChangeListeners.forEach((l) => l(key, value, 'chat'));
-  },
+  resetFields: () =>
+    set({ noticeFields: {}, noticeId: null, caseId: null, noticeType: null, caseData: null }),
 }));
