@@ -1,4 +1,4 @@
-import { Navigate, Outlet } from 'react-router-dom';
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import type { ReactNode } from 'react';
 import { useAuthStore } from '../store/authStore';
 
@@ -11,12 +11,18 @@ interface Props {
 
 export default function ProtectedRoute({ roles, requireBranch = true, userKind, children }: Props) {
   const { isAuthenticated, hasBranch, hasOffice, user } = useAuthStore();
+  const location = useLocation();
 
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
 
-  if (requireBranch && !hasOffice && !hasBranch) {
+  // App users have no office — redirect them off the office-selection screen.
+  if (user?.userKind === 'app' && location.pathname === '/offices') {
+    return <Navigate to="/dashboard" replace />;
+  }
+
+  if (requireBranch && user?.userKind !== 'app' && !hasOffice && !hasBranch) {
     return <Navigate to="/offices" replace />;
   }
 
