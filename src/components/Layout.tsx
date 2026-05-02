@@ -2,7 +2,15 @@ import { Outlet, Link, useLocation } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
 import { useThemeStore } from '../store/themeStore';
 
-const navItems = [
+const APP_NAV = [
+  { path: '/dashboard', label: 'Dashboard' },
+  { path: '/banks', label: 'Banks' },
+  { path: '/users', label: 'App Users' },
+  { path: '/audit-logs', label: 'Audit' },
+  { path: '/settings', label: 'Settings' },
+];
+
+const BANK_NAV = [
   { path: '/dashboard', label: 'Dashboard' },
   { path: '/cases', label: 'Cases' },
   { path: '/review', label: 'Review Queue' },
@@ -19,15 +27,15 @@ export default function Layout() {
   const theme = useThemeStore((s) => s.theme);
   const toggleTheme = useThemeStore((s) => s.toggleTheme);
 
+  const navItems = user?.userKind === 'app' ? APP_NAV : BANK_NAV;
+  const subtitle = user?.userKind === 'app' ? 'App Admin' : user?.branchName;
+
   return (
     <div className="flex h-screen bg-sand-100 dark:bg-dark-bg">
-      {/* Sidebar */}
       <aside className="w-64 bg-sidebar flex flex-col">
         <div className="p-6">
           <h1 className="text-lg font-semibold text-white tracking-tight">Bank SARFAESI</h1>
-          {user?.branchName && (
-            <p className="text-xs text-sidebar-text mt-1">{user.branchName}</p>
-          )}
+          {subtitle && <p className="text-xs text-sidebar-text mt-1">{subtitle}</p>}
         </div>
         <nav className="flex-1 px-3 space-y-0.5">
           {navItems.map((item) => (
@@ -50,7 +58,7 @@ export default function Layout() {
             onClick={toggleTheme}
             className="text-sm text-sidebar-text hover:text-white px-3 py-1.5 rounded-lg hover:bg-sidebar-hover transition-colors w-full text-left flex items-center gap-2"
           >
-            {theme === 'light' ? '\u263E' : '\u2600'}
+            {theme === 'light' ? '☾' : '☀'}
             <span>{theme === 'light' ? 'Dark mode' : 'Light mode'}</span>
           </button>
           <button
@@ -62,7 +70,6 @@ export default function Layout() {
         </div>
       </aside>
 
-      {/* Main content */}
       <main className="flex-1 overflow-auto p-8">
         <Outlet />
       </main>
