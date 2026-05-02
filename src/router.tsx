@@ -6,7 +6,6 @@ import ProtectedRoute from './components/ProtectedRoute';
 
 // Lazy-loaded feature pages
 const Login = lazy(() => import('./features/auth/LoginPage'));
-const BranchSelection = lazy(() => import('./features/auth/BranchSelectionPage'));
 const OfficeSelection = lazy(() => import('./features/auth/OfficeSelectionPage'));
 const Dashboard = lazy(() => import('./features/dashboard/DashboardPage'));
 const CaseList = lazy(() => import('./features/cases/CaseListPage'));
@@ -21,7 +20,6 @@ const VersionCompare = lazy(() => import('./features/registry/VersionCompare'));
 const VersionHistory = lazy(() => import('./features/registry/VersionHistory'));
 const Settings = lazy(() => import('./features/branch/SettingsPage'));
 const Users = lazy(() => import('./features/users/UserListPage'));
-const BranchSetupWizard = lazy(() => import('./features/onboarding/BranchSetupWizard'));
 const InviteSignupPage = lazy(() => import('./features/onboarding/InviteSignupPage'));
 const AppBanksView = lazy(() => import('./features/app-admin/AppBanksView'));
 const AppBankDetailView = lazy(() => import('./features/app-admin/AppBankDetailView'));
@@ -50,8 +48,8 @@ export function AppRouter() {
 
         {/* Authenticated but no office required */}
         <Route path="/offices" element={<OfficeSelection />} />
-        <Route path="/branches" element={<BranchSelection />} />
-        <Route path="/onboarding" element={<BranchSetupWizard />} />
+        {/* Legacy /branches kept as a redirect for one release window */}
+        <Route path="/branches" element={<Navigate to="/offices" replace />} />
 
         {/* Protected routes (require auth + branch) */}
         <Route element={<ProtectedRoute />}>
