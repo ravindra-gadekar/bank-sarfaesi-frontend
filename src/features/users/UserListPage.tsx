@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useAuthStore } from '../../store/authStore';
 import { userApi } from './api/userApi';
-import InviteUserModal from './InviteUserModal';
+import BankUserInviteModal from '../invites/BankUserInviteModal';
 
 const ROLES = ['admin', 'manager', 'maker', 'checker', 'auditor'] as const;
 
@@ -24,6 +24,12 @@ interface UserRow {
 
 export default function UserListPage() {
   const currentUser = useAuthStore((s) => s.user);
+  const offices = useAuthStore((s) => s.offices);
+  const selectedOfficeId = useAuthStore((s) => s.selectedOfficeId);
+  const selectedOffice = useMemo(
+    () => offices.find((o) => o.officeId === selectedOfficeId),
+    [offices, selectedOfficeId],
+  );
   const isAdmin = currentUser?.role === 'admin';
   const isAdminOrManager = isAdmin || currentUser?.role === 'manager';
 
@@ -263,7 +269,10 @@ export default function UserListPage() {
 
       {/* Invite Modal */}
       {showInvite && (
-        <InviteUserModal
+        <BankUserInviteModal
+          inviterOfficeType={selectedOffice?.officeType ?? 'Branch'}
+          inviterBankName={selectedOffice?.bankName ?? ''}
+          defaultTargetOfficeId={currentUser?.officeId ?? currentUser?.branchId ?? selectedOfficeId ?? undefined}
           onClose={() => setShowInvite(false)}
           onSuccess={() => fetchUsers(page)}
         />
