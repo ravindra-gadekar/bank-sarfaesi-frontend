@@ -10,15 +10,30 @@ const APP_NAV = [
   { path: '/settings', label: 'Settings' },
 ];
 
-const BANK_NAV = [
+const BRANCH_NAV = [
   { path: '/dashboard', label: 'Dashboard' },
   { path: '/cases', label: 'Cases' },
+  { path: '/notices', label: 'Notices' },
   { path: '/review', label: 'Review Queue' },
   { path: '/registry', label: 'Registry' },
   { path: '/audit-logs', label: 'Audit Log' },
   { path: '/users', label: 'Users' },
   { path: '/settings', label: 'Settings' },
 ];
+
+function oversightNav(treeLabel: string) {
+  return [
+    { path: '/dashboard', label: 'Dashboard' },
+    { path: '/bank-tree', label: treeLabel },
+    { path: '/users', label: 'Users' },
+    { path: '/audit-logs', label: 'Audit Log' },
+    { path: '/settings', label: 'Settings' },
+  ];
+}
+
+const HO_NAV = oversightNav('Bank Tree');
+const ZONAL_NAV = oversightNav('Zone Tree');
+const REGIONAL_NAV = oversightNav('Region Tree');
 
 export default function Layout() {
   const location = useLocation();
@@ -27,8 +42,26 @@ export default function Layout() {
   const theme = useThemeStore((s) => s.theme);
   const toggleTheme = useThemeStore((s) => s.toggleTheme);
 
-  const navItems = user?.userKind === 'app' ? APP_NAV : BANK_NAV;
-  const subtitle = user?.userKind === 'app' ? 'App Admin' : user?.branchName;
+  const navItems = (() => {
+    if (user?.userKind === 'app') return APP_NAV;
+    switch (user?.officeType) {
+      case 'HO':
+        return HO_NAV;
+      case 'Zonal':
+        return ZONAL_NAV;
+      case 'Regional':
+        return REGIONAL_NAV;
+      case 'Branch':
+      default:
+        return BRANCH_NAV;
+    }
+  })();
+  const subtitle =
+    user?.userKind === 'app'
+      ? 'App Admin'
+      : user?.officeType && user.officeType !== 'Branch'
+      ? `${user.officeType} · ${user.branchName ?? user.bankName ?? ''}`
+      : user?.branchName;
 
   return (
     <div className="flex h-screen bg-sand-100 dark:bg-dark-bg">
