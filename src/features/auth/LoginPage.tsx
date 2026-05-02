@@ -91,6 +91,11 @@ export default function LoginPage() {
 
     setLoading(true);
     try {
+      const status = await authApi.checkEmail(trimmed);
+      if (!status.userExists && !status.hasInvite) {
+        setError('No account found for this email. Please ask your administrator to send you an invite.');
+        return;
+      }
       await authApi.requestOtp(trimmed);
       setCountdown(RESEND_COOLDOWN);
       setStage('otp');

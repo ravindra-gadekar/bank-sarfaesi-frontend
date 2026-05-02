@@ -12,7 +12,9 @@ export const authApi = {
     apiClient.post('/auth/select-office', { officeId }),
   refreshSession: () => apiClient.post('/auth/refresh'),
   logout: () => apiClient.post('/auth/logout'),
-  checkEmail: (email: string) =>
-    apiClient.post('/auth/signup/check-email', { email }),
+  async checkEmail(email: string): Promise<{ userExists: boolean; hasInvite: boolean }> {
+    const { data } = await apiClient.post('/auth/signup/check-email', { email });
+    return data.data;
+  },
   ssoInit: (email: string) => apiClient.post('/auth/sso/init', { email }),
 };
