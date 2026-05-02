@@ -33,6 +33,8 @@ interface User {
   appRole?: 'superadmin' | 'admin' | 'support';
   bankRole?: 'admin' | 'manager' | 'maker' | 'checker' | 'auditor';
   officeId?: string;
+  officeType?: OfficeType;
+  bankName?: string;
 }
 
 interface AuthState {
