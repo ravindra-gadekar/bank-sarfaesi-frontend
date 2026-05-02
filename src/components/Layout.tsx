@@ -1,10 +1,19 @@
-import { Outlet, Link, useLocation } from 'react-router-dom';
+import { Outlet, NavLink } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
 import { useThemeStore } from '../store/themeStore';
 
-const navItems = [
+const APP_NAV = [
+  { path: '/dashboard', label: 'Dashboard' },
+  { path: '/banks', label: 'Banks' },
+  { path: '/users', label: 'App Users' },
+  { path: '/audit-logs', label: 'Audit' },
+  { path: '/settings', label: 'Settings' },
+];
+
+const BRANCH_NAV = [
   { path: '/dashboard', label: 'Dashboard' },
   { path: '/cases', label: 'Cases' },
+  { path: '/notices', label: 'Notices' },
   { path: '/review', label: 'Review Queue' },
   { path: '/registry', label: 'Registry' },
   { path: '/audit-logs', label: 'Audit Log' },
@@ -12,36 +21,70 @@ const navItems = [
   { path: '/settings', label: 'Settings' },
 ];
 
+function oversightNav(treeLabel: string) {
+  return [
+    { path: '/dashboard', label: 'Dashboard' },
+    { path: '/bank-tree', label: treeLabel },
+    { path: '/users', label: 'Users' },
+    { path: '/audit-logs', label: 'Audit Log' },
+    { path: '/settings', label: 'Settings' },
+  ];
+}
+
+const HO_NAV = oversightNav('Bank Tree');
+const ZONAL_NAV = oversightNav('Zone Tree');
+const REGIONAL_NAV = oversightNav('Region Tree');
+
 export default function Layout() {
-  const location = useLocation();
   const user = useAuthStore((s) => s.user);
   const logout = useAuthStore((s) => s.logout);
   const theme = useThemeStore((s) => s.theme);
   const toggleTheme = useThemeStore((s) => s.toggleTheme);
 
+  const navItems = (() => {
+    if (user?.userKind === 'app') return APP_NAV;
+    switch (user?.officeType) {
+      case 'HO':
+        return HO_NAV;
+      case 'Zonal':
+        return ZONAL_NAV;
+      case 'Regional':
+        return REGIONAL_NAV;
+      case 'Branch':
+      default:
+        return BRANCH_NAV;
+    }
+  })();
+  const subtitle =
+    user?.userKind === 'app'
+      ? 'App Admin'
+      : user?.officeType && user.officeType !== 'Branch'
+      ? `${user.officeType} · ${user.branchName ?? user.bankName ?? ''}`
+      : user?.branchName;
+
   return (
     <div className="flex h-screen bg-sand-100 dark:bg-dark-bg">
-      {/* Sidebar */}
       <aside className="w-64 bg-sidebar flex flex-col">
         <div className="p-6">
           <h1 className="text-lg font-semibold text-white tracking-tight">Bank SARFAESI</h1>
-          {user?.branchName && (
-            <p className="text-xs text-sidebar-text mt-1">{user.branchName}</p>
-          )}
+          {subtitle && <p className="text-xs text-sidebar-text mt-1">{subtitle}</p>}
         </div>
-        <nav className="flex-1 px-3 space-y-0.5">
+        <nav className="flex-1 px-3 space-y-0.5" aria-label="Primary">
           {navItems.map((item) => (
-            <Link
+            <NavLink
               key={item.path}
               to={item.path}
-              className={`block px-3 py-2 rounded-lg text-sm transition-colors ${
-                location.pathname === item.path
-                  ? 'bg-sidebar-active text-sidebar-text-active'
-                  : 'text-sidebar-text hover:bg-sidebar-hover hover:text-sidebar-text-active'
-              }`}
+              end={item.path === '/dashboard'}
+              className={({ isActive }) =>
+                `block px-3 py-2 rounded-lg text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 ${
+                  isActive
+                    ? 'bg-sidebar-active text-sidebar-text-active'
+                    : 'text-sidebar-text hover:bg-sidebar-hover hover:text-sidebar-text-active'
+                }`
+              }
             >
               {item.label}
-            </Link>
+            </NavLink>
           ))}
         </nav>
         <div className="px-3 py-4 border-t border-white/10 space-y-1">
@@ -50,7 +93,7 @@ export default function Layout() {
             onClick={toggleTheme}
             className="text-sm text-sidebar-text hover:text-white px-3 py-1.5 rounded-lg hover:bg-sidebar-hover transition-colors w-full text-left flex items-center gap-2"
           >
-            {theme === 'light' ? '\u263E' : '\u2600'}
+            {theme === 'light' ? '☾' : '☀'}
             <span>{theme === 'light' ? 'Dark mode' : 'Light mode'}</span>
           </button>
           <button
@@ -62,7 +105,6 @@ export default function Layout() {
         </div>
       </aside>
 
-      {/* Main content */}
       <main className="flex-1 overflow-auto p-8">
         <Outlet />
       </main>

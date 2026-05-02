@@ -91,6 +91,11 @@ export default function LoginPage() {
 
     setLoading(true);
     try {
+      const status = await authApi.checkEmail(trimmed);
+      if (!status.userExists && !status.hasInvite) {
+        setError('No account found for this email. Please ask your administrator to send you an invite.');
+        return;
+      }
       await authApi.requestOtp(trimmed);
       setCountdown(RESEND_COOLDOWN);
       setStage('otp');
@@ -128,6 +133,8 @@ export default function LoginPage() {
     inputRefs.current[Math.min(digits.length, OTP_LENGTH - 1)]?.focus();
   }, []);
 
+  const selectOffice = useAuthStore((s) => s.selectOffice);
+
   const handleVerify = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
@@ -137,8 +144,36 @@ export default function LoginPage() {
     setLoading(true);
     try {
       const { data } = await authApi.verifyOtp(email.trim().toLowerCase(), code);
-      loginIdentity(data.data.email, data.data.branches ?? []);
-      navigate('/branches', { replace: true });
+      const payload = data.data as {
+        email: string;
+        branches: typeof data.data.branches;
+        userKind?: 'app' | 'bank';
+        user?: { id: string; email: string; name: string; userKind?: 'app' | 'bank'; appRole?: string; role?: string };
+      };
+      const branches = payload.branches ?? [];
+
+      if (payload.userKind === 'app' && payload.user) {
+        // App user: backend issued a full access token; jump straight to dashboard.
+        loginIdentity(payload.email, []);
+        selectOffice('', {
+          id: payload.user.id,
+          email: payload.user.email,
+          name: payload.user.name,
+          role: payload.user.role ?? 'admin',
+          userKind: 'app',
+          appRole: payload.user.appRole as 'superadmin' | 'admin' | 'support' | undefined,
+        });
+        navigate('/dashboard', { replace: true });
+        return;
+      }
+
+      if (branches.length === 0) {
+        setError('No account found for this email. Please ask your administrator to send you an invite.');
+        setOtp(Array(OTP_LENGTH).fill(''));
+        return;
+      }
+      loginIdentity(payload.email, branches);
+      navigate('/offices', { replace: true });
     } catch (err) {
       setError(getErrorMessage(err));
       setOtp(Array(OTP_LENGTH).fill(''));
