@@ -25,6 +25,8 @@ const BranchSetupWizard = lazy(() => import('./features/onboarding/BranchSetupWi
 const InviteSignupPage = lazy(() => import('./features/onboarding/InviteSignupPage'));
 const AppBanksView = lazy(() => import('./features/app-admin/AppBanksView'));
 const AppBankDetailView = lazy(() => import('./features/app-admin/AppBankDetailView'));
+const SubtreeView = lazy(() => import('./features/bank-oversight/SubtreeView'));
+const BranchOversightView = lazy(() => import('./features/bank-oversight/BranchOversightView'));
 const SsoCallback = lazy(() => import('./features/auth/SsoCallbackPage'));
 
 function Loading() {
@@ -81,6 +83,22 @@ export function AppRouter() {
               element={
                 <ProtectedRoute userKind="app">
                   <AppBankDetailView />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/bank-tree"
+              element={
+                <ProtectedRoute userKind="bank">
+                  <SubtreeView />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/bank-tree/:branchId"
+              element={
+                <ProtectedRoute userKind="bank">
+                  <BranchOversightView />
                 </ProtectedRoute>
               }
             />
