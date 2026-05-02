@@ -43,6 +43,14 @@ export default function BankUserInviteModal({
       .catch(() => setRegistry([]));
   }, []);
 
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if (e.key === 'Escape') onClose();
+    }
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [onClose]);
+
   async function submit(e: FormEvent) {
     e.preventDefault();
     setError('');
@@ -71,10 +79,15 @@ export default function BankUserInviteModal({
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
-      <div className="absolute inset-0 bg-black/40" onClick={onClose} />
-      <div className="relative w-full max-w-md bg-sand-50 dark:bg-dark-surface rounded-2xl shadow-lg p-6">
-        <h3 className="text-lg font-semibold mb-4 text-ink dark:text-dark-text">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="bank-invite-title"
+    >
+      <div className="absolute inset-0 bg-black/40" onClick={onClose} aria-hidden="true" />
+      <div className="relative w-full max-w-md bg-sand-50 dark:bg-dark-surface rounded-2xl shadow-lg border border-sand-300 dark:border-dark-border p-6">
+        <h3 id="bank-invite-title" className="text-lg font-semibold mb-4 text-ink dark:text-dark-text">
           Invite Bank User
         </h3>
         <form onSubmit={submit} className="space-y-4">
@@ -107,9 +120,10 @@ export default function BankUserInviteModal({
               aria-label="Email"
               type="email"
               required
+              autoFocus
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-2.5 rounded-xl border border-sand-300 bg-white dark:bg-dark-bg dark:border-dark-border dark:text-dark-text"
+              className="w-full px-4 py-2.5 rounded-xl border border-sand-300 bg-white text-ink placeholder:text-ink-tertiary focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent dark:bg-dark-bg dark:border-dark-border dark:text-dark-text dark:placeholder:text-dark-text-tertiary"
             />
           </div>
 
@@ -190,21 +204,21 @@ export default function BankUserInviteModal({
             </>
           )}
 
-          {error && <p className="text-sm text-red-600 dark:text-red-400">{error}</p>}
-          {success && <p className="text-sm text-green-600 dark:text-green-400">{success}</p>}
+          {error && <p className="text-sm text-red-600 dark:text-red-400" role="alert">{error}</p>}
+          {success && <p className="text-sm text-green-600 dark:text-green-400" role="status">{success}</p>}
 
           <div className="flex justify-end gap-3 pt-2">
             <button
               type="button"
               onClick={onClose}
-              className="border border-sand-300 dark:border-dark-border text-ink dark:text-dark-text py-2.5 px-4 rounded-xl"
+              className="border border-sand-300 dark:border-dark-border text-ink dark:text-dark-text py-2.5 px-4 rounded-xl font-medium hover:bg-sand-200 dark:hover:bg-dark-surface-hover transition-colors"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={submitting}
-              className="bg-accent text-white py-2.5 px-4 rounded-xl disabled:opacity-50"
+              className="bg-accent text-white py-2.5 px-4 rounded-xl font-medium hover:bg-accent-hover transition-colors disabled:opacity-50"
             >
               {submitting ? 'Sending…' : 'Send Invite'}
             </button>

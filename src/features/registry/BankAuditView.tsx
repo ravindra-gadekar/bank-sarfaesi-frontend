@@ -58,11 +58,11 @@ export default function BankAuditView() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-sand-300 dark:border-dark-border text-left">
-                  <th className="px-5 py-3 text-xs font-medium text-ink-tertiary dark:text-dark-text-tertiary uppercase tracking-wide">Time</th>
-                  <th className="px-5 py-3 text-xs font-medium text-ink-tertiary dark:text-dark-text-tertiary uppercase tracking-wide">User</th>
-                  <th className="px-5 py-3 text-xs font-medium text-ink-tertiary dark:text-dark-text-tertiary uppercase tracking-wide">Action</th>
-                  <th className="px-5 py-3 text-xs font-medium text-ink-tertiary dark:text-dark-text-tertiary uppercase tracking-wide">Resource</th>
-                  <th className="px-5 py-3 text-xs font-medium text-ink-tertiary dark:text-dark-text-tertiary uppercase tracking-wide">Details</th>
+                  <th scope="col" className="px-5 py-3 text-xs font-medium text-ink-tertiary dark:text-dark-text-tertiary uppercase tracking-wide">Time</th>
+                  <th scope="col" className="px-5 py-3 text-xs font-medium text-ink-tertiary dark:text-dark-text-tertiary uppercase tracking-wide">User</th>
+                  <th scope="col" className="px-5 py-3 text-xs font-medium text-ink-tertiary dark:text-dark-text-tertiary uppercase tracking-wide">Action</th>
+                  <th scope="col" className="px-5 py-3 text-xs font-medium text-ink-tertiary dark:text-dark-text-tertiary uppercase tracking-wide">Resource</th>
+                  <th scope="col" className="px-5 py-3 text-xs font-medium text-ink-tertiary dark:text-dark-text-tertiary uppercase tracking-wide">Details</th>
                 </tr>
               </thead>
               <tbody>

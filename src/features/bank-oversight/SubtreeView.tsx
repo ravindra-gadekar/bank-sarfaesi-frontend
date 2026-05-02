@@ -36,40 +36,48 @@ export default function SubtreeView() {
         Office Tree
       </h2>
 
-      {TYPE_ORDER.map((t) => {
-        const list = byType[t] ?? [];
-        if (list.length === 0) return null;
-        return (
-          <section key={t} className="mb-6">
-            <h3 className="text-sm font-medium text-ink dark:text-dark-text mb-3">
-              {t} ({list.length})
-            </h3>
-            <ul className="space-y-2 bg-sand-50 dark:bg-dark-surface rounded-2xl border border-sand-300 dark:border-dark-border p-4">
-              {list.map((o) => (
-                <li key={o._id} className="text-sm">
-                  {o.officeType === 'Branch' ? (
-                    <Link
-                      to={`/bank-tree/${o._id}`}
-                      className="font-medium text-accent hover:underline"
-                    >
-                      {o.branchName ?? o.bankName}
-                    </Link>
-                  ) : (
-                    <span className="font-medium text-ink dark:text-dark-text">
-                      {o.branchName ?? o.bankName}
+      {offices.length === 0 ? (
+        <div className="bg-sand-50 dark:bg-dark-surface rounded-2xl border border-dashed border-sand-300 dark:border-dark-border p-8 text-center">
+          <p className="text-ink-secondary dark:text-dark-text-secondary">
+            No offices in your subtree yet.
+          </p>
+        </div>
+      ) : (
+        TYPE_ORDER.map((t) => {
+          const list = byType[t] ?? [];
+          if (list.length === 0) return null;
+          return (
+            <section key={t} className="mb-6">
+              <h3 className="text-sm font-medium text-ink dark:text-dark-text mb-3">
+                {t} ({list.length})
+              </h3>
+              <ul className="space-y-2 bg-sand-50 dark:bg-dark-surface rounded-2xl border border-sand-300 dark:border-dark-border p-4">
+                {list.map((o) => (
+                  <li key={o._id} className="text-sm">
+                    {o.officeType === 'Branch' ? (
+                      <Link
+                        to={`/bank-tree/${o._id}`}
+                        className="font-medium text-accent hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40 rounded"
+                      >
+                        {o.branchName ?? o.bankName}
+                      </Link>
+                    ) : (
+                      <span className="font-medium text-ink dark:text-dark-text">
+                        {o.branchName ?? o.bankName}
+                      </span>
+                    )}
+                    <span className="text-ink-secondary dark:text-dark-text-secondary">
+                      {' — '}
+                      {o.address}
+                      {o.city ? `, ${o.city}` : ''}
                     </span>
-                  )}
-                  <span className="text-ink-secondary dark:text-dark-text-secondary">
-                    {' — '}
-                    {o.address}
-                    {o.city ? `, ${o.city}` : ''}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </section>
-        );
-      })}
+                  </li>
+                ))}
+              </ul>
+            </section>
+          );
+        })
+      )}
     </div>
   );
 }

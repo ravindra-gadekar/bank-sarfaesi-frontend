@@ -1,4 +1,4 @@
-import { Outlet, Link, useLocation } from 'react-router-dom';
+import { Outlet, NavLink } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
 import { useThemeStore } from '../store/themeStore';
 
@@ -36,7 +36,6 @@ const ZONAL_NAV = oversightNav('Zone Tree');
 const REGIONAL_NAV = oversightNav('Region Tree');
 
 export default function Layout() {
-  const location = useLocation();
   const user = useAuthStore((s) => s.user);
   const logout = useAuthStore((s) => s.logout);
   const theme = useThemeStore((s) => s.theme);
@@ -70,19 +69,22 @@ export default function Layout() {
           <h1 className="text-lg font-semibold text-white tracking-tight">Bank SARFAESI</h1>
           {subtitle && <p className="text-xs text-sidebar-text mt-1">{subtitle}</p>}
         </div>
-        <nav className="flex-1 px-3 space-y-0.5">
+        <nav className="flex-1 px-3 space-y-0.5" aria-label="Primary">
           {navItems.map((item) => (
-            <Link
+            <NavLink
               key={item.path}
               to={item.path}
-              className={`block px-3 py-2 rounded-lg text-sm transition-colors ${
-                location.pathname === item.path
-                  ? 'bg-sidebar-active text-sidebar-text-active'
-                  : 'text-sidebar-text hover:bg-sidebar-hover hover:text-sidebar-text-active'
-              }`}
+              end={item.path === '/dashboard'}
+              className={({ isActive }) =>
+                `block px-3 py-2 rounded-lg text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 ${
+                  isActive
+                    ? 'bg-sidebar-active text-sidebar-text-active'
+                    : 'text-sidebar-text hover:bg-sidebar-hover hover:text-sidebar-text-active'
+                }`
+              }
             >
               {item.label}
-            </Link>
+            </NavLink>
           ))}
         </nav>
         <div className="px-3 py-4 border-t border-white/10 space-y-1">

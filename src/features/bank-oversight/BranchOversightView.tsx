@@ -54,10 +54,10 @@ export default function BranchOversightView() {
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-sand-200 dark:border-dark-border text-left">
-                <th className="px-5 py-3 text-xs font-medium text-ink-tertiary dark:text-dark-text-tertiary uppercase tracking-wide">Account No</th>
-                <th className="px-5 py-3 text-xs font-medium text-ink-tertiary dark:text-dark-text-tertiary uppercase tracking-wide">Borrower</th>
-                <th className="px-5 py-3 text-xs font-medium text-ink-tertiary dark:text-dark-text-tertiary uppercase tracking-wide">Sanction Amount</th>
-                <th className="px-5 py-3 text-xs font-medium text-ink-tertiary dark:text-dark-text-tertiary uppercase tracking-wide">Status</th>
+                <th scope="col" className="px-5 py-3 text-xs font-medium text-ink-tertiary dark:text-dark-text-tertiary uppercase tracking-wide">Account No</th>
+                <th scope="col" className="px-5 py-3 text-xs font-medium text-ink-tertiary dark:text-dark-text-tertiary uppercase tracking-wide">Borrower</th>
+                <th scope="col" className="px-5 py-3 text-xs font-medium text-ink-tertiary dark:text-dark-text-tertiary uppercase tracking-wide">Sanction Amount</th>
+                <th scope="col" className="px-5 py-3 text-xs font-medium text-ink-tertiary dark:text-dark-text-tertiary uppercase tracking-wide">Status</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-sand-200 dark:divide-dark-border">
@@ -94,9 +94,9 @@ export default function BranchOversightView() {
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-sand-200 dark:border-dark-border text-left">
-                <th className="px-5 py-3 text-xs font-medium text-ink-tertiary dark:text-dark-text-tertiary uppercase tracking-wide">Type</th>
-                <th className="px-5 py-3 text-xs font-medium text-ink-tertiary dark:text-dark-text-tertiary uppercase tracking-wide">Status</th>
-                <th className="px-5 py-3 text-xs font-medium text-ink-tertiary dark:text-dark-text-tertiary uppercase tracking-wide">Updated</th>
+                <th scope="col" className="px-5 py-3 text-xs font-medium text-ink-tertiary dark:text-dark-text-tertiary uppercase tracking-wide">Type</th>
+                <th scope="col" className="px-5 py-3 text-xs font-medium text-ink-tertiary dark:text-dark-text-tertiary uppercase tracking-wide">Status</th>
+                <th scope="col" className="px-5 py-3 text-xs font-medium text-ink-tertiary dark:text-dark-text-tertiary uppercase tracking-wide">Updated</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-sand-200 dark:divide-dark-border">

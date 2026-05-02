@@ -42,11 +42,11 @@ export default function AppBanksView() {
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-sand-200 dark:border-dark-border text-left">
-                <th className="px-6 py-3 font-medium text-ink-secondary dark:text-dark-text-secondary">Bank Name</th>
-                <th className="px-6 py-3 font-medium text-ink-secondary dark:text-dark-text-secondary">City</th>
-                <th className="px-6 py-3 font-medium text-ink-secondary dark:text-dark-text-secondary">Offices</th>
-                <th className="px-6 py-3 font-medium text-ink-secondary dark:text-dark-text-secondary">Users</th>
-                <th className="px-6 py-3 font-medium text-ink-secondary dark:text-dark-text-secondary">Status</th>
+                <th scope="col" className="px-6 py-3 font-medium text-ink-secondary dark:text-dark-text-secondary">Bank Name</th>
+                <th scope="col" className="px-6 py-3 font-medium text-ink-secondary dark:text-dark-text-secondary">City</th>
+                <th scope="col" className="px-6 py-3 font-medium text-ink-secondary dark:text-dark-text-secondary">Offices</th>
+                <th scope="col" className="px-6 py-3 font-medium text-ink-secondary dark:text-dark-text-secondary">Users</th>
+                <th scope="col" className="px-6 py-3 font-medium text-ink-secondary dark:text-dark-text-secondary">Status</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-sand-200 dark:divide-dark-border">

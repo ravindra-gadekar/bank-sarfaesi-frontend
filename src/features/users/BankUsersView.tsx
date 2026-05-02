@@ -143,13 +143,13 @@ export default function BankUsersView() {
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-sand-200 dark:border-dark-border text-left">
-              <th className="px-6 py-3 font-medium text-ink-secondary dark:text-dark-text-secondary">Name</th>
-              <th className="px-6 py-3 font-medium text-ink-secondary dark:text-dark-text-secondary">Email</th>
-              <th className="px-6 py-3 font-medium text-ink-secondary dark:text-dark-text-secondary">Role</th>
-              <th className="px-6 py-3 font-medium text-ink-secondary dark:text-dark-text-secondary">Status</th>
-              <th className="px-6 py-3 font-medium text-ink-secondary dark:text-dark-text-secondary">Last Login</th>
+              <th scope="col" className="px-6 py-3 font-medium text-ink-secondary dark:text-dark-text-secondary">Name</th>
+              <th scope="col" className="px-6 py-3 font-medium text-ink-secondary dark:text-dark-text-secondary">Email</th>
+              <th scope="col" className="px-6 py-3 font-medium text-ink-secondary dark:text-dark-text-secondary">Role</th>
+              <th scope="col" className="px-6 py-3 font-medium text-ink-secondary dark:text-dark-text-secondary">Status</th>
+              <th scope="col" className="px-6 py-3 font-medium text-ink-secondary dark:text-dark-text-secondary">Last Login</th>
               {isAdmin && (
-                <th className="px-6 py-3 font-medium text-ink-secondary dark:text-dark-text-secondary">Actions</th>
+                <th scope="col" className="px-6 py-3 font-medium text-ink-secondary dark:text-dark-text-secondary">Actions</th>
               )}
             </tr>
           </thead>
