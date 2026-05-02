@@ -23,7 +23,8 @@ const Settings = lazy(() => import('./features/branch/SettingsPage'));
 const Users = lazy(() => import('./features/users/UserListPage'));
 const BranchSetupWizard = lazy(() => import('./features/onboarding/BranchSetupWizard'));
 const InviteSignupPage = lazy(() => import('./features/onboarding/InviteSignupPage'));
-const AppUserInvitePage = lazy(() => import('./features/invites/AppUserInvitePage'));
+const AppBanksView = lazy(() => import('./features/app-admin/AppBanksView'));
+const AppBankDetailView = lazy(() => import('./features/app-admin/AppBankDetailView'));
 const SsoCallback = lazy(() => import('./features/auth/SsoCallbackPage'));
 
 function Loading() {
@@ -68,10 +69,18 @@ export function AppRouter() {
             <Route path="/audit-logs" element={<AuditLog />} />
             <Route path="/users" element={<Users />} />
             <Route
-              path="/invites/app"
+              path="/banks"
               element={
                 <ProtectedRoute userKind="app">
-                  <AppUserInvitePage />
+                  <AppBanksView />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/banks/:bankRootId"
+              element={
+                <ProtectedRoute userKind="app">
+                  <AppBankDetailView />
                 </ProtectedRoute>
               }
             />
